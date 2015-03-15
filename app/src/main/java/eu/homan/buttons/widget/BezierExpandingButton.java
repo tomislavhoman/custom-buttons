@@ -10,7 +10,7 @@ import android.view.View;
 
 import java.lang.ref.WeakReference;
 
-public class BasierExpandingButton extends View {
+public class BezierExpandingButton extends View {
 
     private static final int PAINT_COLOR = 0xFF33B5E5;
     private static final int PAINT_STROKE = 4;
@@ -21,17 +21,17 @@ public class BasierExpandingButton extends View {
 
     private DynamicPoint[] border;
 
-    public BasierExpandingButton(Context context) {
+    public BezierExpandingButton(Context context) {
         super(context);
         initView();
     }
 
-    public BasierExpandingButton(Context context, AttributeSet attrs) {
+    public BezierExpandingButton(Context context, AttributeSet attrs) {
         super(context, attrs);
         initView();
     }
 
-    public BasierExpandingButton(Context context, AttributeSet attrs, int defStyleAttr) {
+    public BezierExpandingButton(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initView();
     }
@@ -231,15 +231,15 @@ public class BasierExpandingButton extends View {
 
         private static final int REFRESH_TIME = 15;//ms
 
-        private final WeakReference<BasierExpandingButton> expandingButtonWeakReference;
+        private final WeakReference<BezierExpandingButton> expandingButtonWeakReference;
 
-        private Animator(BasierExpandingButton constantExpandingButton) {
+        private Animator(BezierExpandingButton constantExpandingButton) {
             this.expandingButtonWeakReference = new WeakReference<>(constantExpandingButton);
         }
 
         @Override
         public void run() {
-            BasierExpandingButton parent = expandingButtonWeakReference.get();
+            BezierExpandingButton parent = expandingButtonWeakReference.get();
             if (parent == null) {
                 return;
             }
