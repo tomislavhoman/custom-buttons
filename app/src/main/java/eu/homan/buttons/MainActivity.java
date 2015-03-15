@@ -14,14 +14,9 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "Clicked", Toast.LENGTH_SHORT).show();
-            }
-        });
+        findViewById(R.id.button1).setOnClickListener(clickListener);
+        findViewById(R.id.button2).setOnClickListener(clickListener);
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -44,4 +39,19 @@ public class MainActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    private View.OnClickListener clickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+
+            switch (v.getId()) {
+                case R.id.button1:
+                    //Toast.makeText(MainActivity.this, "Clicked 1", Toast.LENGTH_SHORT).show();
+                    break;
+                case R.id.button2:
+                    //Toast.makeText(MainActivity.this, "Clicked 2", Toast.LENGTH_SHORT).show();
+                    break;
+            }
+        }
+    };
 }

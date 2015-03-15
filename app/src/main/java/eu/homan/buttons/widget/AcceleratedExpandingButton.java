@@ -10,27 +10,28 @@ import android.view.View;
 
 import java.lang.ref.WeakReference;
 
-public class ExpandingButton extends View {
+public class AcceleratedExpandingButton extends View {
 
     private static final int PAINT_COLOR = 0xFF33B5E5;
     private static final int PAINT_STROKE = 4;
+    private static final int OUTER_LIMIT = PAINT_STROKE + 20;
 
     private final Paint paint = new Paint();
     private final Animator animator = new Animator(this);
 
     private DynamicPoint[] border;
 
-    public ExpandingButton(Context context) {
+    public AcceleratedExpandingButton(Context context) {
         super(context);
         initView();
     }
 
-    public ExpandingButton(Context context, AttributeSet attrs) {
+    public AcceleratedExpandingButton(Context context, AttributeSet attrs) {
         super(context, attrs);
         initView();
     }
 
-    public ExpandingButton(Context context, AttributeSet attrs, int defStyleAttr) {
+    public AcceleratedExpandingButton(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initView();
     }
@@ -145,28 +146,32 @@ public class ExpandingButton extends View {
         int height = getHeight();
 
         return new DynamicPoint[]{
-                new DynamicPoint(border[0].getX(), border[0].getY(), PAINT_STROKE, PAINT_STROKE),
-                new DynamicPoint(border[1].getX(), border[1].getY(), width - PAINT_STROKE, PAINT_STROKE),
-                new DynamicPoint(border[2].getX(), border[2].getY(), width - PAINT_STROKE, height - PAINT_STROKE),
-                new DynamicPoint(border[3].getX(), border[3].getY(), PAINT_STROKE, height - PAINT_STROKE),
-                new DynamicPoint(border[4].getX(), border[4].getY(), PAINT_STROKE, PAINT_STROKE)
+                new DynamicPoint(border[0].getX(), border[0].getY(), OUTER_LIMIT, OUTER_LIMIT),
+                new DynamicPoint(border[1].getX(), border[1].getY(), width - OUTER_LIMIT, OUTER_LIMIT),
+                new DynamicPoint(border[2].getX(), border[2].getY(), width - OUTER_LIMIT, height - OUTER_LIMIT),
+                new DynamicPoint(border[3].getX(), border[3].getY(), OUTER_LIMIT, height - OUTER_LIMIT),
+                new DynamicPoint(border[4].getX(), border[4].getY(), OUTER_LIMIT, OUTER_LIMIT)
         };
     }
 
     private static class DynamicPoint {
 
         private static final float TOLERANCE = 0.1f;
-        private static final float SPEED = 0.3f;
         private static final int MINIMAL_DT = 50;
+        private static final float K = 0.5f;//Spring constant
+        private static final float VISCOSITY = 0.9f;
 
+        //Speed
+        private float vx;
+        private float vy;
+
+        //Positions
         private float x;
         private float y;
 
         private float targetX;
         private float targetY;
 
-        private float vx;
-        private float vy;
 
         private long lastTime = System.currentTimeMillis();
 
@@ -175,25 +180,31 @@ public class ExpandingButton extends View {
             this.y = y;
             this.targetX = targetX;
             this.targetY = targetY;
-
-            vx = targetX > x ? SPEED : -SPEED;
-            vy = targetY > y ? SPEED : -SPEED;
         }
 
         public void update() {
             long now = System.currentTimeMillis();
             float dt = Math.min(MINIMAL_DT, now - lastTime);
+            lastTime = now;
 
-            float dx = vx * dt;
-            float dy = vy * dt;
+            //Euler integration
+            float ax = K * (targetX - x);//The force is stronger when we are farther of the target
+            float ay = K * (targetY - y);
+
+            float dvx = ax * dt;
+            float dvy = ay * dt;
+
+            vx += dvx;
+            vy += dvy;
+
+            vx *= VISCOSITY;
+            vy *= VISCOSITY;
+
+            float dx = vx * dt / 1000;
+            float dy = vy * dt / 1000;
 
             x += dx;
             y += dy;
-
-            x = vx > 0 ? Math.min(x, targetX) : Math.max(x, targetX);
-            y = vy > 0 ? Math.min(y, targetY) : Math.max(y, targetY);
-
-            lastTime = now;
         }
 
         public boolean isFinished() {
@@ -220,15 +231,15 @@ public class ExpandingButton extends View {
 
         private static final int REFRESH_TIME = 15;//ms
 
-        private final WeakReference<ExpandingButton> expandingButtonWeakReference;
+        private final WeakReference<AcceleratedExpandingButton> expandingButtonWeakReference;
 
-        private Animator(ExpandingButton expandingButton) {
-            this.expandingButtonWeakReference = new WeakReference<>(expandingButton);
+        private Animator(AcceleratedExpandingButton constantExpandingButton) {
+            this.expandingButtonWeakReference = new WeakReference<>(constantExpandingButton);
         }
 
         @Override
         public void run() {
-            ExpandingButton parent = expandingButtonWeakReference.get();
+            AcceleratedExpandingButton parent = expandingButtonWeakReference.get();
             if (parent == null) {
                 return;
             }
