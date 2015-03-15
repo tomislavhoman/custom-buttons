@@ -46,10 +46,10 @@ public class MainActivity extends ActionBarActivity {
 
             switch (v.getId()) {
                 case R.id.button1:
-                    //Toast.makeText(MainActivity.this, "Clicked 1", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "Clicked 1", Toast.LENGTH_SHORT).show();
                     break;
                 case R.id.button2:
-                    //Toast.makeText(MainActivity.this, "Clicked 2", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "Clicked 2", Toast.LENGTH_SHORT).show();
                     break;
             }
         }
