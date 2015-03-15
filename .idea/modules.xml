@@ -4,7 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/buttons.iml" filepath="$PROJECT_DIR$/buttons.iml" />
-      <module fileurl="file://$PROJECT_DIR$/lickable.iml" filepath="$PROJECT_DIR$/lickable.iml" />
+      <module fileurl="file://$PROJECT_DIR$/custom-buttons.iml" filepath="$PROJECT_DIR$/custom-buttons.iml" />
     </modules>
   </component>
 </project>
