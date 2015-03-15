@@ -11,8 +11,9 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center">
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:layout_weight="1">
         <eu.homan.buttons.widget.ConstantExpandingButton
             android:id="@+id/button1"
             android:layout_width="match_parent"
@@ -23,8 +24,9 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center">
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:layout_weight="1">
         <eu.homan.buttons.widget.AcceleratedExpandingButton
             android:id="@+id/button2"
             android:layout_width="match_parent"
